@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dispatch Desk — Outreach Control</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+  :root{
+    --ink: #1B2430;
+    --ink-soft: #232F3D;
+    --ink-softer: #2C3A49;
+    --line: #3D4B5B;
+    --paper: #EDE8DD;
+    --paper-soft: #F6F3E9;
+    --text-on-ink: #E7E3D6;
+    --text-on-ink-dim: #97A2AD;
+    --text-on-paper: #241F17;
+    --text-on-paper-dim: #6B6252;
+    --stamp-red: #C1443D;
+    --stamp-red-ink: #8F312B;
+    --stamp-amber: #D9A441;
+    --teal: #5B8C87;
+    --radius: 3px;
+  }
+
+  *{ box-sizing: border-box; }
+
+  body{
+    margin:0;
+    background: var(--ink);
+    color: var(--text-on-ink);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection{ background: var(--stamp-amber); color: var(--ink); }
+
+  a{ color: var(--teal); }
+
+  .wrap{
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px 96px;
+  }
+
+  /* ---------- header ---------- */
+  header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 28px 32px 0;
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+  .brand{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+  }
+  .brand-mark{
+    width: 9px; height:9px; border-radius:50%;
+    background: var(--stamp-red);
+    display:inline-block;
+    box-shadow: 0 0 0 3px rgba(193,68,61,0.18);
+  }
+  .brand-name{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-on-ink-dim);
+  }
+  .settings-toggle{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    background: none;
+    border: 1px solid var(--line);
+    color: var(--text-on-ink-dim);
+    padding: 7px 14px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: border-color .15s ease, color .15s ease;
+  }
+  .settings-toggle:hover{ border-color: var(--teal); color: var(--text-on-ink); }
+
+  /* ---------- hero ---------- */
+  .hero{
+    display:grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 56px;
+    padding: 56px 0 48px;
+    align-items: start;
+  }
+
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--stamp-amber);
+    margin: 0 0 14px;
+  }
+
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(38px, 4.6vw, 56px);
+    line-height: 1.04;
+    letter-spacing: -0.01em;
+    margin: 0 0 18px;
+    color: var(--text-on-ink);
+  }
+  h1 em{
+    font-style: italic;
+    font-weight: 400;
+    color: var(--teal);
+  }
+
+  .lede{
+    font-size: 16.5px;
+    line-height: 1.65;
+    color: var(--text-on-ink-dim);
+    max-width: 46ch;
+    margin: 0 0 36px;
+  }
+
+  .stats{
+    display:flex;
+    gap: 38px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+  }
+  .stat-num{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--text-on-ink);
+  }
+  .stat-num.red{ color: var(--stamp-red); }
+  .stat-num.amber{ color: var(--stamp-amber); }
+  .stat-label{
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-on-ink-dim);
+    margin-top: 6px;
+  }
+
+  /* ---------- dispatch form card ---------- */
+  .slip{
+    background: var(--paper);
+    color: var(--text-on-paper);
+    border-radius: var(--radius);
+    padding: 34px 32px 30px;
+    position: relative;
+    box-shadow: 0 24px 60px -20px rgba(0,0,0,0.55);
+  }
+  .slip::before{
+    content:"";
+    position:absolute;
+    top:0; left:0; right:0; height:6px;
+    background-image: repeating-linear-gradient(90deg, transparent 0 6px, var(--ink) 6px 8px);
+    background-repeat: repeat-x;
+    opacity: 0.35;
+  }
+  .slip-title{
+    font-family:'Fraunces', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 22px;
+    margin: 0 0 4px;
+  }
+  .slip-sub{
+    font-size: 12.5px;
+    color: var(--text-on-paper-dim);
+    margin: 0 0 26px;
+  }
+
+  .field{ margin-bottom: 18px; }
+  .field label{
+    display:block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-on-paper-dim);
+    margin-bottom: 7px;
+  }
+  .field label .req{ color: var(--stamp-red); margin-left: 3px; }
+  .field input{
+    width: 100%;
+    background: var(--paper-soft);
+    border: 1px solid rgba(36,31,23,0.18);
+    border-radius: var(--radius);
+    padding: 11px 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13.5px;
+    color: var(--text-on-paper);
+    outline: none;
+    transition: border-color .15s ease, background .15s ease;
+  }
+  .field input:focus{
+    border-color: var(--teal);
+    background: #fff;
+  }
+  .field input:invalid:not(:placeholder-shown){
+    border-color: var(--stamp-red);
+  }
+
+  .launch-btn{
+    width: 100%;
+    margin-top: 10px;
+    background: var(--ink);
+    color: var(--paper-soft);
+    border: none;
+    border-radius: var(--radius);
+    padding: 13px 18px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    transition: background .15s ease, transform .1s ease;
+  }
+  .launch-btn:hover{ background: #0F151D; }
+  .launch-btn:active{ transform: scale(0.99); }
+  .launch-btn:disabled{ opacity: 0.55; cursor: progress; }
+
+  .slip-status{
+    margin-top: 14px;
+    font-size: 12.5px;
+    font-family: 'IBM Plex Mono', monospace;
+    padding: 10px 12px;
+    border-radius: var(--radius);
+    display: none;
+  }
+  .slip-status.show{ display:block; }
+  .slip-status.ok{ background: rgba(91,140,135,0.14); color: #2F5B57; border: 1px solid rgba(91,140,135,0.4); }
+  .slip-status.err{ background: rgba(193,68,61,0.1); color: var(--stamp-red-ink); border: 1px solid rgba(193,68,61,0.35); }
+  .slip-status.pending{ background: rgba(217,164,65,0.14); color: #8A6420; border: 1px solid rgba(217,164,65,0.4); }
+
+  /* ---------- settings panel ---------- */
+  .settings{
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .25s ease;
+    margin-bottom: 0;
+  }
+  .settings.open{ max-height: 260px; margin-bottom: 24px; }
+  .settings-inner{
+    background: var(--ink-soft);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  .settings-inner .field label{ color: var(--text-on-ink-dim); }
+  .settings-inner .field input{
+    background: var(--ink);
+    border: 1px solid var(--line);
+    color: var(--text-on-ink);
+  }
+  .settings-inner .field input:focus{ border-color: var(--teal); background: var(--ink-softer); }
+  .settings-note{
+    grid-column: 1 / -1;
+    font-size: 12px;
+    color: var(--text-on-ink-dim);
+    line-height: 1.6;
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+    margin-top: 2px;
+  }
+  .settings-note code{
+    background: var(--ink);
+    padding: 1px 6px;
+    border-radius: 2px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+  }
+
+  /* ---------- manifest ---------- */
+  .manifest{
+    border-top: 1px solid var(--line);
+    padding-top: 40px;
+  }
+  .manifest-head{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 22px;
+  }
+  .manifest-title{
+    font-family:'Fraunces', serif;
+    font-weight: 500;
+    font-size: 26px;
+    margin: 0;
+  }
+  .manifest-tools{
+    display:flex;
+    gap: 10px;
+    align-items:center;
+  }
+  .search-box{
+    background: var(--ink-soft);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 9px 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    color: var(--text-on-ink);
+    width: 220px;
+    outline: none;
+  }
+  .search-box:focus{ border-color: var(--teal); }
+  .icon-btn{
+    background: var(--ink-soft);
+    border: 1px solid var(--line);
+    color: var(--text-on-ink-dim);
+    border-radius: var(--radius);
+    padding: 9px 13px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    cursor: pointer;
+    display:flex;
+    align-items:center;
+    gap:7px;
+    transition: border-color .15s ease, color .15s ease;
+  }
+  .icon-btn:hover{ border-color: var(--teal); color: var(--text-on-ink); }
+  .icon-btn.spin svg{ animation: spin 0.7s linear infinite; }
+  @keyframes spin{ to{ transform: rotate(360deg); } }
+
+  .table-panel{
+    background: var(--ink-soft);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  table{ width:100%; border-collapse: collapse; }
+  thead th{
+    text-align:left;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-on-ink-dim);
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--line);
+    font-weight: 500;
+  }
+  tbody td{
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--line);
+    font-size: 13.5px;
+    vertical-align: top;
+  }
+  tbody tr:last-child td{ border-bottom: none; }
+  tbody tr:hover{ background: rgba(255,255,255,0.02); }
+
+  .art-title{
+    font-weight: 500;
+    color: var(--text-on-ink);
+    margin: 0 0 4px;
+    line-height: 1.35;
+  }
+  .art-link{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--teal);
+    text-decoration: none;
+    word-break: break-all;
+  }
+  .art-authors{
+    font-size: 12.5px;
+    color: var(--text-on-ink-dim);
+    line-height: 1.5;
+  }
+  .email-count{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    color: var(--text-on-ink-dim);
+  }
+
+  /* ---------- postmark stamp ---------- */
+  .stamp{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width: 74px;
+    height: 42px;
+    border: 2px solid;
+    border-radius: 30px 30px 30px 30px / 24px 24px 24px 24px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transform: rotate(-6deg);
+    animation: stamp-in .28s ease-out;
+  }
+  @keyframes stamp-in{
+    from{ opacity: 0; transform: rotate(-6deg) scale(1.4); }
+    to{ opacity: 1; transform: rotate(-6deg) scale(1); }
+  }
+  .stamp.sent{
+    border-color: var(--stamp-red);
+    color: var(--stamp-red);
+    box-shadow: inset 0 0 0 1px rgba(193,68,61,0.35);
+  }
+  .stamp.pending{
+    border: 2px dashed var(--stamp-amber);
+    color: var(--stamp-amber);
+    transform: rotate(-3deg);
+  }
+
+  .empty-state, .error-state{
+    padding: 64px 24px;
+    text-align:center;
+  }
+  .empty-state p, .error-state p{
+    font-size: 14px;
+    color: var(--text-on-ink-dim);
+    max-width: 42ch;
+    margin: 10px auto 0;
+    line-height: 1.6;
+  }
+  .empty-state .glyph, .error-state .glyph{
+    font-family:'Fraunces', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: var(--text-on-ink);
+  }
+  .error-state .glyph{ color: var(--stamp-red); }
+
+  footer{
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 40px 32px 0;
+    font-size: 11.5px;
+    color: var(--text-on-ink-dim);
+    border-top: 1px solid var(--line);
+    margin-top: 56px;
+    display:flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  footer span.dot{ color: var(--stamp-red); margin: 0 6px; }
+
+  @media (max-width: 880px){
+    .hero{ grid-template-columns: 1fr; gap: 32px; }
+    .settings-inner{ grid-template-columns: 1fr; }
+    header{ padding: 24px 20px 0; }
+    .wrap{ padding: 0 20px 72px; }
+    thead th:nth-child(3), tbody td:nth-child(3){ display:none; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <span class="brand-mark"></span>
+    <span class="brand-name">Dispatch Desk</span>
+  </div>
+  <button class="settings-toggle" id="settingsToggle" type="button">Connection settings</button>
+</header>
+
+<div class="wrap">
+
+  <div class="settings" id="settingsPanel">
+    <div class="settings-inner">
+      <div class="field">
+        <label for="cfgWebhook">Webhook URL</label>
+        <input type="text" id="cfgWebhook" placeholder="https://ahmedk23123s.app.n8n.cloud/webhook/scrape-articles" value="">
+      </div>
+      <div class="field">
+        <label for="cfgSheetId">Google Sheet ID</label>
+        <input type="text" id="cfgSheetId" placeholder="Sheet ID" value="1wUGwBP7zBO3UK5o2BbdBxu_MLjQ8yWtOZXvxH1enzaw">
+      </div>
+      <div class="field">
+        <label for="cfgSheetName">Sheet name</label>
+        <input type="text" id="cfgSheetName" placeholder="Sheet1" value="Sheet1">
+      </div>
+      <div class="settings-note">
+        Sheet ID is permanently set. Sheet must be <strong>published to the web</strong> (File &rarr; Share &rarr; Publish to web).
+      </div>
+    </div>
+  </div>
+
+  <section class="hero">
+    <div>
+      <p class="eyebrow">Article outreach pipeline</p>
+      <h1>Send the scrape.<br><em>Track every letter.</em></h1>
+      <p class="lede">Point the crawler at a journal's article listing, set how deep it should dig, and launch. Every article it finds — and every author it writes to — lands in the manifest below.</p>
+
+      <div class="stats">
+        <div>
+          <div class="stat-num" id="statTotal">—</div>
+          <div class="stat-label">Articles logged</div>
+        </div>
+        <div>
+          <div class="stat-num red" id="statSent">—</div>
+          <div class="stat-label">Sent</div>
+        </div>
+        <div>
+          <div class="stat-num amber" id="statPending">—</div>
+          <div class="stat-label">Pending</div>
+        </div>
+      </div>
+    </div>
+
+    <form class="slip" id="dispatchForm" novalidate>
+      <p class="slip-title">New dispatch</p>
+      <p class="slip-sub">Fill this out to start a crawl.</p>
+
+      <div class="field">
+        <label for="urlInput">Listing URL <span class="req">*</span></label>
+        <input type="url" id="urlInput" name="url" placeholder="https://journal.example.com/articles" required>
+      </div>
+
+      <div class="field">
+        <label for="maxPagesInput">Max pages to crawl <span class="req">*</span></label>
+        <input type="number" id="maxPagesInput" name="maxPages" placeholder="e.g. 5" min="1" step="1" required>
+      </div>
+
+      <button type="submit" class="launch-btn" id="launchBtn">Launch scrape</button>
+
+      <div class="slip-status" id="slipStatus"></div>
+    </form>
+  </section>
+
+  <section class="manifest">
+    <div class="manifest-head">
+      <h2 class="manifest-title">Outreach manifest</h2>
+      <div class="manifest-tools">
+        <input type="text" class="search-box" id="searchBox" placeholder="Filter by title or author…">
+        <button class="icon-btn" id="refreshBtn" type="button">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+          Refresh
+        </button>
+      </div>
+    </div>
+
+    <div class="table-panel" id="tablePanel">
+      <div class="empty-state">
+        <p class="glyph">Loading the manifest…</p>
+        <p>Reading the Google Sheet.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Dispatch Desk<span class="dot">·</span>reads the sheet your n8n workflow writes to</span>
+    <span id="lastUpdated">Not yet loaded</span>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+
+  // ---- CONFIGURATION - PERMANENTLY SET ----
+  var PERMANENT_SHEET_ID = '1wUGwBP7zBO3UK5o2BbdBxu_MLjQ8yWtOZXvxH1enzaw';
+  var PERMANENT_SHEET_NAME = 'Sheet1';
+
+  // ---- config (reads from UI but falls back to permanent values) ----
+  function cfg(){
+    var sheetIdInput = document.getElementById('cfgSheetId').value.trim();
+    var sheetNameInput = document.getElementById('cfgSheetName').value.trim();
+    return {
+      webhook: document.getElementById('cfgWebhook').value.trim(),
+      sheetId: sheetIdInput || PERMANENT_SHEET_ID,
+      sheetName: sheetNameInput || PERMANENT_SHEET_NAME
+    };
+  }
+
+  // ---- settings toggle ----
+  var settingsToggle = document.getElementById('settingsToggle');
+  var settingsPanel = document.getElementById('settingsPanel');
+  settingsToggle.addEventListener('click', function(){
+    settingsPanel.classList.toggle('open');
+  });
+
+  // ---- dispatch form ----
+  var form = document.getElementById('dispatchForm');
+  var launchBtn = document.getElementById('launchBtn');
+  var statusBox = document.getElementById('slipStatus');
+
+  function setStatus(kind, msg){
+    statusBox.className = 'slip-status show ' + kind;
+    statusBox.textContent = msg;
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var url = document.getElementById('urlInput').value.trim();
+    var maxPages = document.getElementById('maxPagesInput').value;
+    var c = cfg();
+
+    if (!url || !maxPages){
+      setStatus('err', 'Both fields are required.');
+      return;
+    }
+    if (!c.webhook){
+      setStatus('err', 'Add your webhook URL under "Connection settings" first.');
+      return;
+    }
+
+    launchBtn.disabled = true;
+    setStatus('pending', 'Dispatch launched — talking to the webhook…');
+
+    fetch(c.webhook, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url: url, maxPages: Number(maxPages) })
+    })
+      .then(function(res){
+        if (!res.ok) throw new Error('Webhook responded with ' + res.status);
+        return res.text();
+      })
+      .then(function(){
+        setStatus('ok', 'Dispatch launched. The crawl is now running in n8n — the manifest below will fill in as pages save.');
+        form.reset();
+      })
+      .catch(function(err){
+        setStatus('err', 'Dispatch failed — ' + err.message + '. Check the webhook URL and that your n8n instance allows requests from this page (CORS).');
+      })
+      .finally(function(){
+        launchBtn.disabled = false;
+      });
+  });
+
+  // ---- manifest (Google Sheets gviz read) ----
+  var tablePanel = document.getElementById('tablePanel');
+  var searchBox = document.getElementById('searchBox');
+  var refreshBtn = document.getElementById('refreshBtn');
+  var lastUpdated = document.getElementById('lastUpdated');
+  var statTotal = document.getElementById('statTotal');
+  var statSent = document.getElementById('statSent');
+  var statPending = document.getElementById('statPending');
+
+  var currentRows = [];
+
+  function renderEmpty(){
+    tablePanel.innerHTML =
+      '<div class="empty-state">' +
+        '<p class="glyph">Nothing logged yet</p>' +
+        '<p>Launch a scrape above — articles will appear here once the workflow starts saving rows.</p>' +
+      '</div>';
+  }
+
+  function renderError(msg){
+    tablePanel.innerHTML =
+      '<div class="error-state">' +
+        '<p class="glyph">Can\'t reach the sheet</p>' +
+        '<p>' + msg + ' Make sure your sheet is <strong>published to the web</strong> (File &rarr; Share &rarr; Publish to web).</p>' +
+      '</div>';
+  }
+
+  function renderTable(rows){
+    if (!rows.length){
+      renderEmpty();
+      return;
+    }
+    var html = '<table><thead><tr>' +
+      '<th>Article</th><th>Authors</th><th>Emails</th><th>Status</th>' +
+      '</tr></thead><tbody>';
+
+    rows.forEach(function(r){
+      var title = r.title || '(untitled)';
+      var url = r.articleUrl || '#';
+      var authors = r.authors || '\u2014';
+      var emails = (r.authorEmails || '').split(';').map(function(s){return s.trim();}).filter(Boolean);
+      var sent = (r.Sent || r.sent || '').trim().toLowerCase() === 'yes';
+
+      html += '<tr>' +
+        '<td><p class="art-title">' + escapeHtml(title) + '</p><a class="art-link" href="' + escapeAttr(url) + '" target="_blank" rel="noopener">' + escapeHtml(shortenUrl(url)) + '</a></td>' +
+        '<td class="art-authors">' + escapeHtml(authors) + '</td>' +
+        '<td class="email-count">' + emails.length + ' ' + (emails.length === 1 ? 'address' : 'addresses') + '</td>' +
+        '<td>' + (sent ? '<span class="stamp sent">Sent</span>' : '<span class="stamp pending">Pending</span>') + '</td>' +
+        '</tr>';
+    });
+
+    html += '</tbody></table>';
+    tablePanel.innerHTML = html;
+  }
+
+  function shortenUrl(u){
+    if (u.length <= 62) return u;
+    return u.slice(0, 42) + '\u2026' + u.slice(-16);
+  }
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+  function escapeAttr(s){ return escapeHtml(s); }
+
+  function updateStats(rows){
+    var sent = rows.filter(function(r){ return (r.Sent || r.sent || '').trim().toLowerCase() === 'yes'; }).length;
+    statTotal.textContent = rows.length;
+    statSent.textContent = sent;
+    statPending.textContent = rows.length - sent;
+  }
+
+  function applyFilter(){
+    var q = searchBox.value.trim().toLowerCase();
+    if (!q){ renderTable(currentRows); return; }
+    var filtered = currentRows.filter(function(r){
+      return ((r.title || '') + ' ' + (r.authors || '')).toLowerCase().indexOf(q) !== -1;
+    });
+    renderTable(filtered);
+  }
+  searchBox.addEventListener('input', applyFilter);
+
+  function loadManifest(){
+    var c = cfg();
+    if (!c.sheetId){
+      renderError('No Sheet ID configured.');
+      return;
+    }
+    refreshBtn.classList.add('spin');
+
+    var endpoint = 'https://docs.google.com/spreadsheets/d/' + encodeURIComponent(c.sheetId) + 
+      '/gviz/tq?tqx=out:json&sheet=' + encodeURIComponent(c.sheetName);
+
+    console.log('Loading from:', endpoint);
+
+    fetch(endpoint)
+      .then(function(res){
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.text();
+      })
+      .then(function(text){
+        var jsonStart = text.indexOf('{');
+        var jsonEnd = text.lastIndexOf('}') + 1;
+        if (jsonStart === -1 || jsonEnd === 0) {
+          throw new Error('Invalid response format - no JSON found');
+        }
+        var jsonStr = text.substring(jsonStart, jsonEnd);
+        var data = JSON.parse(jsonStr);
+
+        if (!data.table || !data.table.cols){
+          throw new Error('Unexpected sheet format - no table found');
+        }
+
+        // Get column labels - if empty, use first row as headers
+        var labels = data.table.cols.map(function(c){ return c.label || ''; });
+        
+        // Check if all labels are empty - means first row is data, not headers
+        var allLabelsEmpty = labels.every(function(l){ return l === ''; });
+        
+        var rows = [];
+        var rowData = data.table.rows || [];
+        
+        if (allLabelsEmpty && rowData.length > 0) {
+          // First row contains headers, rest contain data
+          var headerRow = rowData[0];
+          var headerLabels = (headerRow.c || []).map(function(cell){ 
+            return cell ? String(cell.v || '').trim() : ''; 
+          });
+          
+          console.log('Using first row as headers:', headerLabels);
+          
+          // Process remaining rows as data
+          for (var i = 1; i < rowData.length; i++) {
+            var row = rowData[i];
+            var obj = {};
+            (row.c || []).forEach(function(cell, j){
+              var label = headerLabels[j] || 'col_' + j;
+              obj[label] = cell ? cell.v : '';
+            });
+            rows.push(obj);
+          }
+        } else {
+          // Normal flow - labels from columns
+          rows = rowData.map(function(row){
+            var obj = {};
+            (row.c || []).forEach(function(cell, i){
+              var label = labels[i] || 'col_' + i;
+              obj[label] = cell ? cell.v : '';
+            });
+            return obj;
+          });
+        }
+
+        // Filter out rows where articleUrl is empty
+        rows = rows.filter(function(r){
+          return r.articleUrl && r.articleUrl.toString().trim() !== '';
+        });
+
+        console.log('Final rows count:', rows.length);
+        console.log('First row sample:', rows[0]);
+
+        currentRows = rows;
+        updateStats(rows);
+        applyFilter();
+        lastUpdated.textContent = 'Last read ' + new Date().toLocaleTimeString();
+      })
+      .catch(function(err){
+        console.error('Error:', err);
+        renderError(err.message);
+        lastUpdated.textContent = 'Read failed: ' + err.message;
+      })
+      .finally(function(){
+        refreshBtn.classList.remove('spin');
+      });
+  }
+
+  refreshBtn.addEventListener('click', loadManifest);
+
+  // initial load + auto-refresh every 60 seconds
+  loadManifest();
+  setInterval(loadManifest, 60000);
+
+})();
+</script>
+
+</body>
+</html>
