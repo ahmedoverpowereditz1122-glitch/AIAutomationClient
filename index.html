@@ -1,473 +1,417 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dispatch Desk — Outreach Control</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dispatch Desk — Outreach Control</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ––– reset & root ––– */
+    :root{
+      --ink: #1B2430;
+      --ink-soft: #232F3D;
+      --ink-softer: #2C3A49;
+      --line: #3D4B5B;
+      --paper: #EDE8DD;
+      --paper-soft: #F6F3E9;
+      --text-on-ink: #E7E3D6;
+      --text-on-ink-dim: #97A2AD;
+      --text-on-paper: #241F17;
+      --text-on-paper-dim: #6B6252;
+      --stamp-red: #C1443D;
+      --stamp-red-ink: #8F312B;
+      --stamp-amber: #D9A441;
+      --teal: #5B8C87;
+      --radius: 3px;
+    }
 
-  :root{
-    --ink: #1B2430;
-    --ink-soft: #232F3D;
-    --ink-softer: #2C3A49;
-    --line: #3D4B5B;
-    --paper: #EDE8DD;
-    --paper-soft: #F6F3E9;
-    --text-on-ink: #E7E3D6;
-    --text-on-ink-dim: #97A2AD;
-    --text-on-paper: #241F17;
-    --text-on-paper-dim: #6B6252;
-    --stamp-red: #C1443D;
-    --stamp-red-ink: #8F312B;
-    --stamp-amber: #D9A441;
-    --teal: #5B8C87;
-    --radius: 3px;
-  }
+    *{ box-sizing: border-box; }
 
-  *{ box-sizing: border-box; }
+    body{
+      margin:0;
+      background: var(--ink);
+      color: var(--text-on-ink);
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
 
-  body{
-    margin:0;
-    background: var(--ink);
-    color: var(--text-on-ink);
-    font-family: 'Inter', sans-serif;
-    -webkit-font-smoothing: antialiased;
-  }
+    ::selection{ background: var(--stamp-amber); color: var(--ink); }
 
-  ::selection{ background: var(--stamp-amber); color: var(--ink); }
+    a{ color: var(--teal); }
 
-  a{ color: var(--teal); }
+    .wrap{
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 32px 96px;
+    }
 
-  .wrap{
-    max-width: 1180px;
-    margin: 0 auto;
-    padding: 0 32px 96px;
-  }
+    /* ––– header ––– */
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding: 28px 32px 0;
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+    .brand{
+      display:flex;
+      align-items:baseline;
+      gap:10px;
+    }
+    .brand-mark{
+      width: 9px; height:9px; border-radius:50%;
+      background: var(--stamp-red);
+      display:inline-block;
+      box-shadow: 0 0 0 3px rgba(193,68,61,0.18);
+    }
+    .brand-name{
+      font-family:'IBM Plex Mono', monospace;
+      font-size: 12.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-on-ink-dim);
+    }
 
-  /* ---------- header ---------- */
-  header{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding: 28px 32px 0;
-    max-width: 1180px;
-    margin: 0 auto;
-  }
-  .brand{
-    display:flex;
-    align-items:baseline;
-    gap:10px;
-  }
-  .brand-mark{
-    width: 9px; height:9px; border-radius:50%;
-    background: var(--stamp-red);
-    display:inline-block;
-    box-shadow: 0 0 0 3px rgba(193,68,61,0.18);
-  }
-  .brand-name{
-    font-family:'IBM Plex Mono', monospace;
-    font-size: 12.5px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--text-on-ink-dim);
-  }
-  .settings-toggle{
-    font-family:'IBM Plex Mono', monospace;
-    font-size: 12px;
-    letter-spacing: 0.06em;
-    background: none;
-    border: 1px solid var(--line);
-    color: var(--text-on-ink-dim);
-    padding: 7px 14px;
-    border-radius: var(--radius);
-    cursor: pointer;
-    transition: border-color .15s ease, color .15s ease;
-  }
-  .settings-toggle:hover{ border-color: var(--teal); color: var(--text-on-ink); }
+    /* ––– hero ––– */
+    .hero{
+      display:grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 56px;
+      padding: 56px 0 48px;
+      align-items: start;
+    }
 
-  /* ---------- hero ---------- */
-  .hero{
-    display:grid;
-    grid-template-columns: 1.15fr 0.85fr;
-    gap: 56px;
-    padding: 56px 0 48px;
-    align-items: start;
-  }
+    .eyebrow{
+      font-family:'IBM Plex Mono', monospace;
+      font-size: 11.5px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--stamp-amber);
+      margin: 0 0 14px;
+    }
 
-  .eyebrow{
-    font-family:'IBM Plex Mono', monospace;
-    font-size: 11.5px;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--stamp-amber);
-    margin: 0 0 14px;
-  }
+    h1{
+      font-family:'Fraunces', serif;
+      font-weight: 500;
+      font-size: clamp(38px, 4.6vw, 56px);
+      line-height: 1.04;
+      letter-spacing: -0.01em;
+      margin: 0 0 18px;
+      color: var(--text-on-ink);
+    }
+    h1 em{
+      font-style: italic;
+      font-weight: 400;
+      color: var(--teal);
+    }
 
-  h1{
-    font-family:'Fraunces', serif;
-    font-weight: 500;
-    font-size: clamp(38px, 4.6vw, 56px);
-    line-height: 1.04;
-    letter-spacing: -0.01em;
-    margin: 0 0 18px;
-    color: var(--text-on-ink);
-  }
-  h1 em{
-    font-style: italic;
-    font-weight: 400;
-    color: var(--teal);
-  }
+    .lede{
+      font-size: 16.5px;
+      line-height: 1.65;
+      color: var(--text-on-ink-dim);
+      max-width: 46ch;
+      margin: 0 0 36px;
+    }
 
-  .lede{
-    font-size: 16.5px;
-    line-height: 1.65;
-    color: var(--text-on-ink-dim);
-    max-width: 46ch;
-    margin: 0 0 36px;
-  }
+    .stats{
+      display:flex;
+      gap: 38px;
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
+    }
+    .stat-num{
+      font-family:'IBM Plex Mono', monospace;
+      font-size: 30px;
+      font-weight: 600;
+      line-height: 1;
+      color: var(--text-on-ink);
+    }
+    .stat-num.red{ color: var(--stamp-red); }
+    .stat-num.amber{ color: var(--stamp-amber); }
+    .stat-label{
+      font-size: 11.5px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-on-ink-dim);
+      margin-top: 6px;
+    }
 
-  .stats{
-    display:flex;
-    gap: 38px;
-    padding-top: 22px;
-    border-top: 1px solid var(--line);
-  }
-  .stat-num{
-    font-family:'IBM Plex Mono', monospace;
-    font-size: 30px;
-    font-weight: 600;
-    line-height: 1;
-    color: var(--text-on-ink);
-  }
-  .stat-num.red{ color: var(--stamp-red); }
-  .stat-num.amber{ color: var(--stamp-amber); }
-  .stat-label{
-    font-size: 11.5px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-on-ink-dim);
-    margin-top: 6px;
-  }
+    /* ––– dispatch form card ––– */
+    .slip{
+      background: var(--paper);
+      color: var(--text-on-paper);
+      border-radius: var(--radius);
+      padding: 34px 32px 30px;
+      position: relative;
+      box-shadow: 0 24px 60px -20px rgba(0,0,0,0.55);
+    }
+    .slip::before{
+      content:"";
+      position:absolute;
+      top:0; left:0; right:0; height:6px;
+      background-image: repeating-linear-gradient(90deg, transparent 0 6px, var(--ink) 6px 8px);
+      background-repeat: repeat-x;
+      opacity: 0.35;
+    }
+    .slip-title{
+      font-family:'Fraunces', serif;
+      font-style: italic;
+      font-weight: 500;
+      font-size: 22px;
+      margin: 0 0 4px;
+    }
+    .slip-sub{
+      font-size: 12.5px;
+      color: var(--text-on-paper-dim);
+      margin: 0 0 26px;
+    }
 
-  /* ---------- dispatch form card ---------- */
-  .slip{
-    background: var(--paper);
-    color: var(--text-on-paper);
-    border-radius: var(--radius);
-    padding: 34px 32px 30px;
-    position: relative;
-    box-shadow: 0 24px 60px -20px rgba(0,0,0,0.55);
-  }
-  .slip::before{
-    content:"";
-    position:absolute;
-    top:0; left:0; right:0; height:6px;
-    background-image: repeating-linear-gradient(90deg, transparent 0 6px, var(--ink) 6px 8px);
-    background-repeat: repeat-x;
-    opacity: 0.35;
-  }
-  .slip-title{
-    font-family:'Fraunces', serif;
-    font-style: italic;
-    font-weight: 500;
-    font-size: 22px;
-    margin: 0 0 4px;
-  }
-  .slip-sub{
-    font-size: 12.5px;
-    color: var(--text-on-paper-dim);
-    margin: 0 0 26px;
-  }
+    .field{ margin-bottom: 18px; }
+    .field label{
+      display:block;
+      font-family:'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-on-paper-dim);
+      margin-bottom: 7px;
+    }
+    .field label .req{ color: var(--stamp-red); margin-left: 3px; }
+    .field input{
+      width: 100%;
+      background: var(--paper-soft);
+      border: 1px solid rgba(36,31,23,0.18);
+      border-radius: var(--radius);
+      padding: 11px 12px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13.5px;
+      color: var(--text-on-paper);
+      outline: none;
+      transition: border-color .15s ease, background .15s ease;
+    }
+    .field input:focus{
+      border-color: var(--teal);
+      background: #fff;
+    }
+    .field input:invalid:not(:placeholder-shown){
+      border-color: var(--stamp-red);
+    }
 
-  .field{ margin-bottom: 18px; }
-  .field label{
-    display:block;
-    font-family:'IBM Plex Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-on-paper-dim);
-    margin-bottom: 7px;
-  }
-  .field label .req{ color: var(--stamp-red); margin-left: 3px; }
-  .field input{
-    width: 100%;
-    background: var(--paper-soft);
-    border: 1px solid rgba(36,31,23,0.18);
-    border-radius: var(--radius);
-    padding: 11px 12px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 13.5px;
-    color: var(--text-on-paper);
-    outline: none;
-    transition: border-color .15s ease, background .15s ease;
-  }
-  .field input:focus{
-    border-color: var(--teal);
-    background: #fff;
-  }
-  .field input:invalid:not(:placeholder-shown){
-    border-color: var(--stamp-red);
-  }
+    .launch-btn{
+      width: 100%;
+      margin-top: 10px;
+      background: var(--ink);
+      color: var(--paper-soft);
+      border: none;
+      border-radius: var(--radius);
+      padding: 13px 18px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      transition: background .15s ease, transform .1s ease;
+    }
+    .launch-btn:hover{ background: #0F151D; }
+    .launch-btn:active{ transform: scale(0.99); }
+    .launch-btn:disabled{ opacity: 0.55; cursor: progress; }
 
-  .launch-btn{
-    width: 100%;
-    margin-top: 10px;
-    background: var(--ink);
-    color: var(--paper-soft);
-    border: none;
-    border-radius: var(--radius);
-    padding: 13px 18px;
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    font-size: 14px;
-    letter-spacing: 0.01em;
-    cursor: pointer;
-    transition: background .15s ease, transform .1s ease;
-  }
-  .launch-btn:hover{ background: #0F151D; }
-  .launch-btn:active{ transform: scale(0.99); }
-  .launch-btn:disabled{ opacity: 0.55; cursor: progress; }
+    .slip-status{
+      margin-top: 14px;
+      font-size: 12.5px;
+      font-family: 'IBM Plex Mono', monospace;
+      padding: 10px 12px;
+      border-radius: var(--radius);
+      display: none;
+    }
+    .slip-status.show{ display:block; }
+    .slip-status.ok{ background: rgba(91,140,135,0.14); color: #2F5B57; border: 1px solid rgba(91,140,135,0.4); }
+    .slip-status.err{ background: rgba(193,68,61,0.1); color: var(--stamp-red-ink); border: 1px solid rgba(193,68,61,0.35); }
+    .slip-status.pending{ background: rgba(217,164,65,0.14); color: #8A6420; border: 1px solid rgba(217,164,65,0.4); }
 
-  .slip-status{
-    margin-top: 14px;
-    font-size: 12.5px;
-    font-family: 'IBM Plex Mono', monospace;
-    padding: 10px 12px;
-    border-radius: var(--radius);
-    display: none;
-  }
-  .slip-status.show{ display:block; }
-  .slip-status.ok{ background: rgba(91,140,135,0.14); color: #2F5B57; border: 1px solid rgba(91,140,135,0.4); }
-  .slip-status.err{ background: rgba(193,68,61,0.1); color: var(--stamp-red-ink); border: 1px solid rgba(193,68,61,0.35); }
-  .slip-status.pending{ background: rgba(217,164,65,0.14); color: #8A6420; border: 1px solid rgba(217,164,65,0.4); }
+    /* ––– manifest ––– */
+    .manifest{
+      border-top: 1px solid var(--line);
+      padding-top: 40px;
+    }
+    .manifest-head{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+    .manifest-title{
+      font-family:'Fraunces', serif;
+      font-weight: 500;
+      font-size: 26px;
+      margin: 0;
+    }
+    .manifest-tools{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+    }
+    .search-box{
+      background: var(--ink-soft);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 9px 12px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12.5px;
+      color: var(--text-on-ink);
+      width: 220px;
+      outline: none;
+    }
+    .search-box:focus{ border-color: var(--teal); }
+    .icon-btn{
+      background: var(--ink-soft);
+      border: 1px solid var(--line);
+      color: var(--text-on-ink-dim);
+      border-radius: var(--radius);
+      padding: 9px 13px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      cursor: pointer;
+      display:flex;
+      align-items:center;
+      gap:7px;
+      transition: border-color .15s ease, color .15s ease;
+    }
+    .icon-btn:hover{ border-color: var(--teal); color: var(--text-on-ink); }
+    .icon-btn.spin svg{ animation: spin 0.7s linear infinite; }
+    @keyframes spin{ to{ transform: rotate(360deg); } }
 
-  /* ---------- settings panel ---------- */
-  .settings{
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height .25s ease;
-    margin-bottom: 0;
-  }
-  .settings.open{ max-height: 260px; margin-bottom: 24px; }
-  .settings-inner{
-    background: var(--ink-soft);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    padding: 20px 24px;
-    display:grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
-  }
-  .settings-inner .field label{ color: var(--text-on-ink-dim); }
-  .settings-inner .field input{
-    background: var(--ink);
-    border: 1px solid var(--line);
-    color: var(--text-on-ink);
-  }
-  .settings-inner .field input:focus{ border-color: var(--teal); background: var(--ink-softer); }
-  .settings-note{
-    grid-column: 1 / -1;
-    font-size: 12px;
-    color: var(--text-on-ink-dim);
-    line-height: 1.6;
-    border-top: 1px solid var(--line);
-    padding-top: 14px;
-    margin-top: 2px;
-  }
-  .settings-note code{
-    background: var(--ink);
-    padding: 1px 6px;
-    border-radius: 2px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-  }
+    .table-panel{
+      background: var(--ink-soft);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    table{ width:100%; border-collapse: collapse; }
+    thead th{
+      text-align:left;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10.5px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-on-ink-dim);
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+      font-weight: 500;
+    }
+    tbody td{
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      font-size: 13.5px;
+      vertical-align: top;
+    }
+    tbody tr:last-child td{ border-bottom: none; }
+    tbody tr:hover{ background: rgba(255,255,255,0.02); }
 
-  /* ---------- manifest ---------- */
-  .manifest{
-    border-top: 1px solid var(--line);
-    padding-top: 40px;
-  }
-  .manifest-head{
-    display:flex;
-    align-items:flex-end;
-    justify-content:space-between;
-    flex-wrap: wrap;
-    gap: 16px;
-    margin-bottom: 22px;
-  }
-  .manifest-title{
-    font-family:'Fraunces', serif;
-    font-weight: 500;
-    font-size: 26px;
-    margin: 0;
-  }
-  .manifest-tools{
-    display:flex;
-    gap: 10px;
-    align-items:center;
-  }
-  .search-box{
-    background: var(--ink-soft);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    padding: 9px 12px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12.5px;
-    color: var(--text-on-ink);
-    width: 220px;
-    outline: none;
-  }
-  .search-box:focus{ border-color: var(--teal); }
-  .icon-btn{
-    background: var(--ink-soft);
-    border: 1px solid var(--line);
-    color: var(--text-on-ink-dim);
-    border-radius: var(--radius);
-    padding: 9px 13px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px;
-    cursor: pointer;
-    display:flex;
-    align-items:center;
-    gap:7px;
-    transition: border-color .15s ease, color .15s ease;
-  }
-  .icon-btn:hover{ border-color: var(--teal); color: var(--text-on-ink); }
-  .icon-btn.spin svg{ animation: spin 0.7s linear infinite; }
-  @keyframes spin{ to{ transform: rotate(360deg); } }
+    .art-title{
+      font-weight: 500;
+      color: var(--text-on-ink);
+      margin: 0 0 4px;
+      line-height: 1.35;
+    }
+    .art-link{
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--teal);
+      text-decoration: none;
+      word-break: break-all;
+    }
+    .art-authors{
+      font-size: 12.5px;
+      color: var(--text-on-ink-dim);
+      line-height: 1.5;
+    }
+    .email-count{
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12.5px;
+      color: var(--text-on-ink-dim);
+    }
 
-  .table-panel{
-    background: var(--ink-soft);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    overflow: hidden;
-  }
-  table{ width:100%; border-collapse: collapse; }
-  thead th{
-    text-align:left;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10.5px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-on-ink-dim);
-    padding: 14px 18px;
-    border-bottom: 1px solid var(--line);
-    font-weight: 500;
-  }
-  tbody td{
-    padding: 16px 18px;
-    border-bottom: 1px solid var(--line);
-    font-size: 13.5px;
-    vertical-align: top;
-  }
-  tbody tr:last-child td{ border-bottom: none; }
-  tbody tr:hover{ background: rgba(255,255,255,0.02); }
+    .stamp{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width: 74px;
+      height: 42px;
+      border: 2px solid;
+      border-radius: 30px 30px 30px 30px / 24px 24px 24px 24px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transform: rotate(-6deg);
+      animation: stamp-in .28s ease-out;
+    }
+    @keyframes stamp-in{
+      from{ opacity: 0; transform: rotate(-6deg) scale(1.4); }
+      to{ opacity: 1; transform: rotate(-6deg) scale(1); }
+    }
+    .stamp.sent{
+      border-color: var(--stamp-red);
+      color: var(--stamp-red);
+      box-shadow: inset 0 0 0 1px rgba(193,68,61,0.35);
+    }
+    .stamp.pending{
+      border: 2px dashed var(--stamp-amber);
+      color: var(--stamp-amber);
+      transform: rotate(-3deg);
+    }
 
-  .art-title{
-    font-weight: 500;
-    color: var(--text-on-ink);
-    margin: 0 0 4px;
-    line-height: 1.35;
-  }
-  .art-link{
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    color: var(--teal);
-    text-decoration: none;
-    word-break: break-all;
-  }
-  .art-authors{
-    font-size: 12.5px;
-    color: var(--text-on-ink-dim);
-    line-height: 1.5;
-  }
-  .email-count{
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12.5px;
-    color: var(--text-on-ink-dim);
-  }
+    .empty-state, .error-state{
+      padding: 64px 24px;
+      text-align:center;
+    }
+    .empty-state p, .error-state p{
+      font-size: 14px;
+      color: var(--text-on-ink-dim);
+      max-width: 42ch;
+      margin: 10px auto 0;
+      line-height: 1.6;
+    }
+    .empty-state .glyph, .error-state .glyph{
+      font-family:'Fraunces', serif;
+      font-style: italic;
+      font-size: 22px;
+      color: var(--text-on-ink);
+    }
+    .error-state .glyph{ color: var(--stamp-red); }
 
-  /* ---------- postmark stamp ---------- */
-  .stamp{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    width: 74px;
-    height: 42px;
-    border: 2px solid;
-    border-radius: 30px 30px 30px 30px / 24px 24px 24px 24px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10.5px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    transform: rotate(-6deg);
-    animation: stamp-in .28s ease-out;
-  }
-  @keyframes stamp-in{
-    from{ opacity: 0; transform: rotate(-6deg) scale(1.4); }
-    to{ opacity: 1; transform: rotate(-6deg) scale(1); }
-  }
-  .stamp.sent{
-    border-color: var(--stamp-red);
-    color: var(--stamp-red);
-    box-shadow: inset 0 0 0 1px rgba(193,68,61,0.35);
-  }
-  .stamp.pending{
-    border: 2px dashed var(--stamp-amber);
-    color: var(--stamp-amber);
-    transform: rotate(-3deg);
-  }
+    footer{
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 40px 32px 0;
+      font-size: 11.5px;
+      color: var(--text-on-ink-dim);
+      border-top: 1px solid var(--line);
+      margin-top: 56px;
+      display:flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    footer span.dot{ color: var(--stamp-red); margin: 0 6px; }
 
-  .empty-state, .error-state{
-    padding: 64px 24px;
-    text-align:center;
-  }
-  .empty-state p, .error-state p{
-    font-size: 14px;
-    color: var(--text-on-ink-dim);
-    max-width: 42ch;
-    margin: 10px auto 0;
-    line-height: 1.6;
-  }
-  .empty-state .glyph, .error-state .glyph{
-    font-family:'Fraunces', serif;
-    font-style: italic;
-    font-size: 22px;
-    color: var(--text-on-ink);
-  }
-  .error-state .glyph{ color: var(--stamp-red); }
+    @media (max-width: 880px){
+      .hero{ grid-template-columns: 1fr; gap: 32px; }
+      header{ padding: 24px 20px 0; }
+      .wrap{ padding: 0 20px 72px; }
+      thead th:nth-child(3), tbody td:nth-child(3){ display:none; }
+    }
 
-  footer{
-    max-width: 1180px;
-    margin: 0 auto;
-    padding: 40px 32px 0;
-    font-size: 11.5px;
-    color: var(--text-on-ink-dim);
-    border-top: 1px solid var(--line);
-    margin-top: 56px;
-    display:flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  footer span.dot{ color: var(--stamp-red); margin: 0 6px; }
-
-  @media (max-width: 880px){
-    .hero{ grid-template-columns: 1fr; gap: 32px; }
-    .settings-inner{ grid-template-columns: 1fr; }
-    header{ padding: 24px 20px 0; }
-    .wrap{ padding: 0 20px 72px; }
-    thead th:nth-child(3), tbody td:nth-child(3){ display:none; }
-  }
-
-  @media (prefers-reduced-motion: reduce){
-    *{ animation: none !important; transition: none !important; }
-  }
-</style>
+    @media (prefers-reduced-motion: reduce){
+      *{ animation: none !important; transition: none !important; }
+    }
+  </style>
 </head>
 <body>
 
@@ -476,30 +420,9 @@
     <span class="brand-mark"></span>
     <span class="brand-name">Dispatch Desk</span>
   </div>
-  <button class="settings-toggle" id="settingsToggle" type="button">Connection settings</button>
 </header>
 
 <div class="wrap">
-
-  <div class="settings" id="settingsPanel">
-    <div class="settings-inner">
-      <div class="field">
-        <label for="cfgWebhook">Webhook URL</label>
-        <input type="text" id="cfgWebhook" placeholder="https://ahmedk23123s.app.n8n.cloud/webhook/scrape-articles" value="">
-      </div>
-      <div class="field">
-        <label for="cfgSheetId">Google Sheet ID</label>
-        <input type="text" id="cfgSheetId" placeholder="Sheet ID" value="1wUGwBP7zBO3UK5o2BbdBxu_MLjQ8yWtOZXvxH1enzaw">
-      </div>
-      <div class="field">
-        <label for="cfgSheetName">Sheet name</label>
-        <input type="text" id="cfgSheetName" placeholder="Sheet1" value="Sheet1">
-      </div>
-      <div class="settings-note">
-        Sheet ID is permanently set. Sheet must be <strong>published to the web</strong> (File &rarr; Share &rarr; Publish to web).
-      </div>
-    </div>
-  </div>
 
   <section class="hero">
     <div>
@@ -572,28 +495,19 @@
 
 <script>
 (function(){
-
-  // ---- CONFIGURATION - PERMANENTLY SET ----
+  // ---- PERMANENT CONFIGURATION (hardcoded from your n8n webhook) ----
+  var PERMANENT_WEBHOOK = 'https://ahmedk23123s.app.n8n.cloud/webhook/scrape-articles';
   var PERMANENT_SHEET_ID = '1wUGwBP7zBO3UK5o2BbdBxu_MLjQ8yWtOZXvxH1enzaw';
   var PERMANENT_SHEET_NAME = 'Sheet1';
 
-  // ---- config (reads from UI but falls back to permanent values) ----
+  // ---- config (all hardcoded, no UI needed) ----
   function cfg(){
-    var sheetIdInput = document.getElementById('cfgSheetId').value.trim();
-    var sheetNameInput = document.getElementById('cfgSheetName').value.trim();
     return {
-      webhook: document.getElementById('cfgWebhook').value.trim(),
-      sheetId: sheetIdInput || PERMANENT_SHEET_ID,
-      sheetName: sheetNameInput || PERMANENT_SHEET_NAME
+      webhook: PERMANENT_WEBHOOK,
+      sheetId: PERMANENT_SHEET_ID,
+      sheetName: PERMANENT_SHEET_NAME
     };
   }
-
-  // ---- settings toggle ----
-  var settingsToggle = document.getElementById('settingsToggle');
-  var settingsPanel = document.getElementById('settingsPanel');
-  settingsToggle.addEventListener('click', function(){
-    settingsPanel.classList.toggle('open');
-  });
 
   // ---- dispatch form ----
   var form = document.getElementById('dispatchForm');
@@ -615,10 +529,6 @@
       setStatus('err', 'Both fields are required.');
       return;
     }
-    if (!c.webhook){
-      setStatus('err', 'Add your webhook URL under "Connection settings" first.');
-      return;
-    }
 
     launchBtn.disabled = true;
     setStatus('pending', 'Dispatch launched — talking to the webhook…');
@@ -637,7 +547,7 @@
         form.reset();
       })
       .catch(function(err){
-        setStatus('err', 'Dispatch failed — ' + err.message + '. Check the webhook URL and that your n8n instance allows requests from this page (CORS).');
+        setStatus('err', 'Dispatch failed — ' + err.message + '. Check that your n8n webhook is active and allows CORS requests.');
       })
       .finally(function(){
         launchBtn.disabled = false;
@@ -758,25 +668,16 @@
           throw new Error('Unexpected sheet format - no table found');
         }
 
-        // Get column labels - if empty, use first row as headers
         var labels = data.table.cols.map(function(c){ return c.label || ''; });
-        
-        // Check if all labels are empty - means first row is data, not headers
         var allLabelsEmpty = labels.every(function(l){ return l === ''; });
-        
         var rows = [];
         var rowData = data.table.rows || [];
         
         if (allLabelsEmpty && rowData.length > 0) {
-          // First row contains headers, rest contain data
           var headerRow = rowData[0];
           var headerLabels = (headerRow.c || []).map(function(cell){ 
             return cell ? String(cell.v || '').trim() : ''; 
           });
-          
-          console.log('Using first row as headers:', headerLabels);
-          
-          // Process remaining rows as data
           for (var i = 1; i < rowData.length; i++) {
             var row = rowData[i];
             var obj = {};
@@ -787,7 +688,6 @@
             rows.push(obj);
           }
         } else {
-          // Normal flow - labels from columns
           rows = rowData.map(function(row){
             var obj = {};
             (row.c || []).forEach(function(cell, i){
@@ -798,7 +698,6 @@
           });
         }
 
-        // Filter out rows where articleUrl is empty
         rows = rows.filter(function(r){
           return r.articleUrl && r.articleUrl.toString().trim() !== '';
         });
