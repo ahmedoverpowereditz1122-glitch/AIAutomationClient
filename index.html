@@ -7,7 +7,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    /* ––– reset & root ––– */
     :root{
       --ink: #1B2430;
       --ink-soft: #232F3D;
@@ -37,367 +36,188 @@
     }
 
     ::selection{ background: var(--stamp-amber); color: var(--ink); }
-
     a{ color: var(--teal); }
 
-    .wrap{
-      max-width: 1180px;
-      margin: 0 auto;
-      padding: 0 32px 96px;
-    }
+    .wrap{ max-width: 1180px; margin: 0 auto; padding: 0 32px 96px; }
 
-    /* ––– header ––– */
     header{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding: 28px 32px 0;
-      max-width: 1180px;
-      margin: 0 auto;
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 28px 32px 0; max-width: 1180px; margin: 0 auto;
     }
-    .brand{
-      display:flex;
-      align-items:baseline;
-      gap:10px;
-    }
+    .brand{ display:flex; align-items:baseline; gap:10px; }
     .brand-mark{
       width: 9px; height:9px; border-radius:50%;
-      background: var(--stamp-red);
-      display:inline-block;
+      background: var(--stamp-red); display:inline-block;
       box-shadow: 0 0 0 3px rgba(193,68,61,0.18);
     }
+    .brand-mark.running{
+      background: var(--stamp-amber);
+      box-shadow: 0 0 0 3px rgba(217,164,65,0.22);
+      animation: pulse 1.4s ease-in-out infinite;
+    }
+    @keyframes pulse{ 0%, 100%{ opacity: 1; } 50%{ opacity: 0.35; } }
     .brand-name{
-      font-family:'IBM Plex Mono', monospace;
-      font-size: 12.5px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--text-on-ink-dim);
+      font-family:'IBM Plex Mono', monospace; font-size: 12.5px;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-on-ink-dim);
     }
+    .header-status{
+      font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;
+      letter-spacing: 0.04em; color: var(--text-on-ink-dim);
+      display:flex; align-items:center; gap:8px;
+    }
+    .header-status .dot{ width:6px; height:6px; border-radius:50%; background: #4B5A69; display:inline-block; }
+    .header-status.running .dot{ background: var(--stamp-amber); }
+    .header-status.idle .dot{ background: var(--teal); }
+    .header-status.unknown .dot{ background: var(--stamp-red); }
 
-    /* ––– hero ––– */
     .hero{
-      display:grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 56px;
-      padding: 56px 0 48px;
-      align-items: start;
+      display:grid; grid-template-columns: 1.15fr 0.85fr; gap: 56px;
+      padding: 56px 0 48px; align-items: start;
     }
-
     .eyebrow{
-      font-family:'IBM Plex Mono', monospace;
-      font-size: 11.5px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--stamp-amber);
-      margin: 0 0 14px;
+      font-family:'IBM Plex Mono', monospace; font-size: 11.5px;
+      letter-spacing: 0.16em; text-transform: uppercase; color: var(--stamp-amber); margin: 0 0 14px;
     }
-
     h1{
-      font-family:'Fraunces', serif;
-      font-weight: 500;
-      font-size: clamp(38px, 4.6vw, 56px);
-      line-height: 1.04;
-      letter-spacing: -0.01em;
-      margin: 0 0 18px;
-      color: var(--text-on-ink);
+      font-family:'Fraunces', serif; font-weight: 500; font-size: clamp(38px, 4.6vw, 56px);
+      line-height: 1.04; letter-spacing: -0.01em; margin: 0 0 18px; color: var(--text-on-ink);
     }
-    h1 em{
-      font-style: italic;
-      font-weight: 400;
-      color: var(--teal);
-    }
+    h1 em{ font-style: italic; font-weight: 400; color: var(--teal); }
+    .lede{ font-size: 16.5px; line-height: 1.65; color: var(--text-on-ink-dim); max-width: 46ch; margin: 0 0 24px; }
 
-    .lede{
-      font-size: 16.5px;
-      line-height: 1.65;
-      color: var(--text-on-ink-dim);
-      max-width: 46ch;
-      margin: 0 0 36px;
+    .job-banner{
+      display:none; align-items:flex-start; gap: 12px;
+      background: rgba(217,164,65,0.1); border: 1px solid rgba(217,164,65,0.35);
+      border-radius: var(--radius); padding: 14px 16px; margin: 0 0 28px;
     }
+    .job-banner.show{ display:flex; }
+    .job-banner.complete{ background: rgba(91,140,135,0.12); border-color: rgba(91,140,135,0.4); }
+    .job-banner.unknown{ background: rgba(193,68,61,0.08); border-color: rgba(193,68,61,0.35); }
+    .job-banner .spinner{
+      width: 14px; height:14px; border-radius:50%;
+      border: 2px solid rgba(217,164,65,0.3); border-top-color: var(--stamp-amber);
+      animation: spin 0.7s linear infinite; flex-shrink:0; margin-top: 2px;
+    }
+    .job-banner.complete .spinner, .job-banner.unknown .spinner{ display:none; }
+    .job-banner-text{ font-size: 13px; line-height: 1.55; color: var(--text-on-ink); }
+    .job-banner-text strong{ display:block; margin-bottom: 2px; font-weight:600; }
+    .job-banner-text .sub{ color: var(--text-on-ink-dim); font-size:12px; }
 
-    .stats{
-      display:flex;
-      gap: 38px;
-      padding-top: 22px;
-      border-top: 1px solid var(--line);
-    }
-    .stat-num{
-      font-family:'IBM Plex Mono', monospace;
-      font-size: 30px;
-      font-weight: 600;
-      line-height: 1;
-      color: var(--text-on-ink);
-    }
+    .stats{ display:flex; gap: 38px; padding-top: 22px; border-top: 1px solid var(--line); }
+    .stat-num{ font-family:'IBM Plex Mono', monospace; font-size: 30px; font-weight: 600; line-height: 1; color: var(--text-on-ink); }
     .stat-num.red{ color: var(--stamp-red); }
     .stat-num.amber{ color: var(--stamp-amber); }
-    .stat-label{
-      font-size: 11.5px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text-on-ink-dim);
-      margin-top: 6px;
-    }
+    .stat-label{ font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-on-ink-dim); margin-top: 6px; }
 
-    /* ––– dispatch form card ––– */
     .slip{
-      background: var(--paper);
-      color: var(--text-on-paper);
-      border-radius: var(--radius);
-      padding: 34px 32px 30px;
-      position: relative;
-      box-shadow: 0 24px 60px -20px rgba(0,0,0,0.55);
+      background: var(--paper); color: var(--text-on-paper); border-radius: var(--radius);
+      padding: 34px 32px 30px; position: relative;
+      box-shadow: 0 24px 60px -20px rgba(0,0,0,0.55); transition: opacity .2s ease;
     }
     .slip::before{
-      content:"";
-      position:absolute;
-      top:0; left:0; right:0; height:6px;
+      content:""; position:absolute; top:0; left:0; right:0; height:6px;
       background-image: repeating-linear-gradient(90deg, transparent 0 6px, var(--ink) 6px 8px);
-      background-repeat: repeat-x;
-      opacity: 0.35;
+      background-repeat: repeat-x; opacity: 0.35;
     }
-    .slip-title{
-      font-family:'Fraunces', serif;
-      font-style: italic;
-      font-weight: 500;
-      font-size: 22px;
-      margin: 0 0 4px;
-    }
-    .slip-sub{
-      font-size: 12.5px;
-      color: var(--text-on-paper-dim);
-      margin: 0 0 26px;
-    }
+    .slip.locked{ opacity: 0.6; }
+    .slip-title{ font-family:'Fraunces', serif; font-style: italic; font-weight: 500; font-size: 22px; margin: 0 0 4px; }
+    .slip-sub{ font-size: 12.5px; color: var(--text-on-paper-dim); margin: 0 0 26px; }
 
     .field{ margin-bottom: 18px; }
     .field label{
-      display:block;
-      font-family:'IBM Plex Mono', monospace;
-      font-size: 11px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text-on-paper-dim);
-      margin-bottom: 7px;
+      display:block; font-family:'IBM Plex Mono', monospace; font-size: 11px;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-on-paper-dim); margin-bottom: 7px;
     }
     .field label .req{ color: var(--stamp-red); margin-left: 3px; }
     .field input{
-      width: 100%;
-      background: var(--paper-soft);
-      border: 1px solid rgba(36,31,23,0.18);
-      border-radius: var(--radius);
-      padding: 11px 12px;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 13.5px;
-      color: var(--text-on-paper);
-      outline: none;
+      width: 100%; background: var(--paper-soft); border: 1px solid rgba(36,31,23,0.18);
+      border-radius: var(--radius); padding: 11px 12px; font-family: 'IBM Plex Mono', monospace;
+      font-size: 13.5px; color: var(--text-on-paper); outline: none;
       transition: border-color .15s ease, background .15s ease;
     }
-    .field input:focus{
-      border-color: var(--teal);
-      background: #fff;
-    }
-    .field input:invalid:not(:placeholder-shown){
-      border-color: var(--stamp-red);
-    }
+    .field input:focus{ border-color: var(--teal); background: #fff; }
+    .field input:invalid:not(:placeholder-shown){ border-color: var(--stamp-red); }
+    .field input:disabled{ background: rgba(36,31,23,0.06); cursor: not-allowed; }
 
     .launch-btn{
-      width: 100%;
-      margin-top: 10px;
-      background: var(--ink);
-      color: var(--paper-soft);
-      border: none;
-      border-radius: var(--radius);
-      padding: 13px 18px;
-      font-family: 'Inter', sans-serif;
-      font-weight: 600;
-      font-size: 14px;
-      letter-spacing: 0.01em;
-      cursor: pointer;
+      width: 100%; margin-top: 10px; background: var(--ink); color: var(--paper-soft);
+      border: none; border-radius: var(--radius); padding: 13px 18px; font-family: 'Inter', sans-serif;
+      font-weight: 600; font-size: 14px; letter-spacing: 0.01em; cursor: pointer;
       transition: background .15s ease, transform .1s ease;
     }
     .launch-btn:hover{ background: #0F151D; }
     .launch-btn:active{ transform: scale(0.99); }
-    .launch-btn:disabled{ opacity: 0.55; cursor: progress; }
+    .launch-btn:disabled{ opacity: 0.55; cursor: not-allowed; }
 
     .slip-status{
-      margin-top: 14px;
-      font-size: 12.5px;
-      font-family: 'IBM Plex Mono', monospace;
-      padding: 10px 12px;
-      border-radius: var(--radius);
-      display: none;
+      margin-top: 14px; font-size: 12.5px; font-family: 'IBM Plex Mono', monospace;
+      padding: 10px 12px; border-radius: var(--radius); display: none;
     }
     .slip-status.show{ display:block; }
     .slip-status.ok{ background: rgba(91,140,135,0.14); color: #2F5B57; border: 1px solid rgba(91,140,135,0.4); }
     .slip-status.err{ background: rgba(193,68,61,0.1); color: var(--stamp-red-ink); border: 1px solid rgba(193,68,61,0.35); }
     .slip-status.pending{ background: rgba(217,164,65,0.14); color: #8A6420; border: 1px solid rgba(217,164,65,0.4); }
+    .slip-status.busy{ background: rgba(217,164,65,0.14); color: #8A6420; border: 1px solid rgba(217,164,65,0.4); }
 
-    /* ––– manifest ––– */
-    .manifest{
-      border-top: 1px solid var(--line);
-      padding-top: 40px;
-    }
+    .manifest{ border-top: 1px solid var(--line); padding-top: 40px; }
     .manifest-head{
-      display:flex;
-      align-items:flex-end;
-      justify-content:space-between;
-      flex-wrap: wrap;
-      gap: 16px;
-      margin-bottom: 22px;
+      display:flex; align-items:flex-end; justify-content:space-between;
+      flex-wrap: wrap; gap: 16px; margin-bottom: 22px;
     }
-    .manifest-title{
-      font-family:'Fraunces', serif;
-      font-weight: 500;
-      font-size: 26px;
-      margin: 0;
-    }
-    .manifest-tools{
-      display:flex;
-      gap: 10px;
-      align-items:center;
-    }
+    .manifest-title{ font-family:'Fraunces', serif; font-weight: 500; font-size: 26px; margin: 0; }
+    .manifest-tools{ display:flex; gap: 10px; align-items:center; }
     .search-box{
-      background: var(--ink-soft);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 9px 12px;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 12.5px;
-      color: var(--text-on-ink);
-      width: 220px;
-      outline: none;
+      background: var(--ink-soft); border: 1px solid var(--line); border-radius: var(--radius);
+      padding: 9px 12px; font-family: 'IBM Plex Mono', monospace; font-size: 12.5px;
+      color: var(--text-on-ink); width: 220px; outline: none;
     }
     .search-box:focus{ border-color: var(--teal); }
     .icon-btn{
-      background: var(--ink-soft);
-      border: 1px solid var(--line);
-      color: var(--text-on-ink-dim);
-      border-radius: var(--radius);
-      padding: 9px 13px;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 12px;
-      cursor: pointer;
-      display:flex;
-      align-items:center;
-      gap:7px;
+      background: var(--ink-soft); border: 1px solid var(--line); color: var(--text-on-ink-dim);
+      border-radius: var(--radius); padding: 9px 13px; font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px; cursor: pointer; display:flex; align-items:center; gap:7px;
       transition: border-color .15s ease, color .15s ease;
     }
     .icon-btn:hover{ border-color: var(--teal); color: var(--text-on-ink); }
     .icon-btn.spin svg{ animation: spin 0.7s linear infinite; }
     @keyframes spin{ to{ transform: rotate(360deg); } }
 
-    .table-panel{
-      background: var(--ink-soft);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      overflow: hidden;
-    }
+    .table-panel{ background: var(--ink-soft); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
     table{ width:100%; border-collapse: collapse; }
     thead th{
-      text-align:left;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 10.5px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-on-ink-dim);
-      padding: 14px 18px;
-      border-bottom: 1px solid var(--line);
-      font-weight: 500;
+      text-align:left; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-on-ink-dim);
+      padding: 14px 18px; border-bottom: 1px solid var(--line); font-weight: 500;
     }
-    tbody td{
-      padding: 16px 18px;
-      border-bottom: 1px solid var(--line);
-      font-size: 13.5px;
-      vertical-align: top;
-    }
+    tbody td{ padding: 16px 18px; border-bottom: 1px solid var(--line); font-size: 13.5px; vertical-align: top; }
     tbody tr:last-child td{ border-bottom: none; }
     tbody tr:hover{ background: rgba(255,255,255,0.02); }
 
-    .art-title{
-      font-weight: 500;
-      color: var(--text-on-ink);
-      margin: 0 0 4px;
-      line-height: 1.35;
-    }
-    .art-link{
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 11px;
-      color: var(--teal);
-      text-decoration: none;
-      word-break: break-all;
-    }
-    .art-authors{
-      font-size: 12.5px;
-      color: var(--text-on-ink-dim);
-      line-height: 1.5;
-    }
-    .email-count{
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 12.5px;
-      color: var(--text-on-ink-dim);
-    }
+    .art-title{ font-weight: 500; color: var(--text-on-ink); margin: 0 0 4px; line-height: 1.35; }
+    .art-link{ font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--teal); text-decoration: none; word-break: break-all; }
+    .art-authors{ font-size: 12.5px; color: var(--text-on-ink-dim); line-height: 1.5; }
+    .email-count{ font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: var(--text-on-ink-dim); }
 
     .stamp{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      width: 74px;
-      height: 42px;
-      border: 2px solid;
-      border-radius: 30px 30px 30px 30px / 24px 24px 24px 24px;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 10.5px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      transform: rotate(-6deg);
+      display:inline-flex; align-items:center; justify-content:center; width: 74px; height: 42px;
+      border: 2px solid; border-radius: 30px 30px 30px 30px / 24px 24px 24px 24px;
+      font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase; transform: rotate(-6deg);
       animation: stamp-in .28s ease-out;
     }
-    @keyframes stamp-in{
-      from{ opacity: 0; transform: rotate(-6deg) scale(1.4); }
-      to{ opacity: 1; transform: rotate(-6deg) scale(1); }
-    }
-    .stamp.sent{
-      border-color: var(--stamp-red);
-      color: var(--stamp-red);
-      box-shadow: inset 0 0 0 1px rgba(193,68,61,0.35);
-    }
-    .stamp.pending{
-      border: 2px dashed var(--stamp-amber);
-      color: var(--stamp-amber);
-      transform: rotate(-3deg);
-    }
+    @keyframes stamp-in{ from{ opacity: 0; transform: rotate(-6deg) scale(1.4); } to{ opacity: 1; transform: rotate(-6deg) scale(1); } }
+    .stamp.sent{ border-color: var(--stamp-red); color: var(--stamp-red); box-shadow: inset 0 0 0 1px rgba(193,68,61,0.35); }
+    .stamp.pending{ border: 2px dashed var(--stamp-amber); color: var(--stamp-amber); transform: rotate(-3deg); }
 
-    .empty-state, .error-state{
-      padding: 64px 24px;
-      text-align:center;
-    }
-    .empty-state p, .error-state p{
-      font-size: 14px;
-      color: var(--text-on-ink-dim);
-      max-width: 42ch;
-      margin: 10px auto 0;
-      line-height: 1.6;
-    }
-    .empty-state .glyph, .error-state .glyph{
-      font-family:'Fraunces', serif;
-      font-style: italic;
-      font-size: 22px;
-      color: var(--text-on-ink);
-    }
+    .empty-state, .error-state{ padding: 64px 24px; text-align:center; }
+    .empty-state p, .error-state p{ font-size: 14px; color: var(--text-on-ink-dim); max-width: 42ch; margin: 10px auto 0; line-height: 1.6; }
+    .empty-state .glyph, .error-state .glyph{ font-family:'Fraunces', serif; font-style: italic; font-size: 22px; color: var(--text-on-ink); }
     .error-state .glyph{ color: var(--stamp-red); }
 
     footer{
-      max-width: 1180px;
-      margin: 0 auto;
-      padding: 40px 32px 0;
-      font-size: 11.5px;
-      color: var(--text-on-ink-dim);
-      border-top: 1px solid var(--line);
-      margin-top: 56px;
-      display:flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 8px;
+      max-width: 1180px; margin: 0 auto; padding: 40px 32px 0; font-size: 11.5px;
+      color: var(--text-on-ink-dim); border-top: 1px solid var(--line); margin-top: 56px;
+      display:flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
     }
     footer span.dot{ color: var(--stamp-red); margin: 0 6px; }
 
@@ -407,18 +227,19 @@
       .wrap{ padding: 0 20px 72px; }
       thead th:nth-child(3), tbody td:nth-child(3){ display:none; }
     }
-
-    @media (prefers-reduced-motion: reduce){
-      *{ animation: none !important; transition: none !important; }
-    }
+    @media (prefers-reduced-motion: reduce){ *{ animation: none !important; transition: none !important; } }
   </style>
 </head>
 <body>
 
 <header>
   <div class="brand">
-    <span class="brand-mark"></span>
+    <span class="brand-mark" id="brandMark"></span>
     <span class="brand-name">Dispatch Desk</span>
+  </div>
+  <div class="header-status idle" id="headerStatus">
+    <span class="dot"></span>
+    <span id="headerStatusText">Checking status…</span>
   </div>
 </header>
 
@@ -429,6 +250,14 @@
       <p class="eyebrow">Article outreach pipeline</p>
       <h1>Send the scrape.<br><em>Track every letter.</em></h1>
       <p class="lede">Point the crawler at a journal's article listing, set how deep it should dig, and launch. Every article it finds — and every author it writes to — lands in the manifest below.</p>
+
+      <div class="job-banner" id="jobBanner">
+        <span class="spinner"></span>
+        <div class="job-banner-text">
+          <strong id="jobBannerTitle">A job is currently running…</strong>
+          <span class="sub" id="jobBannerSub"></span>
+        </div>
+      </div>
 
       <div class="stats">
         <div>
@@ -448,7 +277,7 @@
 
     <form class="slip" id="dispatchForm" novalidate>
       <p class="slip-title">New dispatch</p>
-      <p class="slip-sub">Fill this out to start a crawl.</p>
+      <p class="slip-sub" id="slipSub">Fill this out to start a crawl.</p>
 
       <div class="field">
         <label for="urlInput">Listing URL <span class="req">*</span></label>
@@ -495,17 +324,25 @@
 
 <script>
 (function(){
-  // ---- PERMANENT CONFIGURATION (hardcoded from your n8n webhook) ----
+  // ---- PERMANENT CONFIGURATION ----
   var PERMANENT_WEBHOOK = 'https://ahmedk23123s.app.n8n.cloud/webhook/scrape-articles';
-  var PERMANENT_SHEET_ID = '1wUGwBP7zBO3UK5o2BbdBxu_MLjQ8yWtOZXvxH1enzaw';
-  var PERMANENT_SHEET_NAME = 'Sheet1';
 
-  // ---- config (all hardcoded, no UI needed) ----
+  // Articles data sheet (the one n8n saves scraped rows into)
+  var DATA_SHEET_ID = '1wUGwBP7zBO3UK5o2BbdBxu_MLjQ8yWtOZXvxH1enzaw';
+  var DATA_SHEET_NAME = 'Sheet1';
+
+  // Status sheet (the new tiny sheet — n8n writes "running" / "idle" here)
+  var STATUS_SHEET_ID = '1Z0AHWyO41XAF65BoQUZ-ii7iPyHXvnYrUyiaG1QwcJo';
+  var STATUS_SHEET_NAME = 'Sheet1';
+
+  // How often to re-check both sheets
+  var POLL_MS = 15000;
+
   function cfg(){
     return {
       webhook: PERMANENT_WEBHOOK,
-      sheetId: PERMANENT_SHEET_ID,
-      sheetName: PERMANENT_SHEET_NAME
+      sheetId: DATA_SHEET_ID,
+      sheetName: DATA_SHEET_NAME
     };
   }
 
@@ -513,6 +350,10 @@
   var form = document.getElementById('dispatchForm');
   var launchBtn = document.getElementById('launchBtn');
   var statusBox = document.getElementById('slipStatus');
+  var slip = document.querySelector('.slip');
+  var slipSub = document.getElementById('slipSub');
+  var urlInput = document.getElementById('urlInput');
+  var maxPagesInput = document.getElementById('maxPagesInput');
 
   function setStatus(kind, msg){
     statusBox.className = 'slip-status show ' + kind;
@@ -521,8 +362,9 @@
 
   form.addEventListener('submit', function(e){
     e.preventDefault();
-    var url = document.getElementById('urlInput').value.trim();
-    var maxPages = document.getElementById('maxPagesInput').value;
+
+    var url = urlInput.value.trim();
+    var maxPages = maxPagesInput.value;
     var c = cfg();
 
     if (!url || !maxPages){
@@ -530,7 +372,28 @@
       return;
     }
 
+    // Fresh check, right now, straight from the Status sheet — don't trust
+    // whatever the last 15-second poll happened to see.
     launchBtn.disabled = true;
+    setStatus('pending', 'Checking current status…');
+
+    checkStatusFresh().then(function(state){
+      if (state === 'running'){
+        setStatus('busy', 'A job is already running (just checked). Wait for it to finish first.');
+        launchBtn.disabled = jobIsRunning;
+        return;
+      }
+      if (state === 'unknown'){
+        setStatus('err', 'Could not confirm status from the sheet — try Refresh, or check the Status sheet is shared correctly.');
+        launchBtn.disabled = jobIsRunning;
+        return;
+      }
+      // state === 'idle' -> safe to launch
+      launchDispatch(url, maxPages, c);
+    });
+  });
+
+  function launchDispatch(url, maxPages, c){
     setStatus('pending', 'Dispatch launched — talking to the webhook…');
 
     fetch(c.webhook, {
@@ -543,16 +406,160 @@
         return res.text();
       })
       .then(function(){
-        setStatus('ok', 'Dispatch launched. The crawl is now running in n8n — the manifest below will fill in as pages save.');
+        setStatus('ok', 'Dispatch launched. The crawl is now running in n8n — status and manifest below will update automatically.');
         form.reset();
+        // Poll the Status sheet right away so the UI reflects "running" quickly
+        // (n8n's "Set Status Running" node should flip it within a few seconds).
+        setTimeout(loadStatus, 3000);
+        loadManifest();
       })
       .catch(function(err){
         setStatus('err', 'Dispatch failed — ' + err.message + '. Check that your n8n webhook is active and allows CORS requests.');
       })
       .finally(function(){
-        launchBtn.disabled = false;
+        launchBtn.disabled = jobIsRunning;
       });
-  });
+  }
+
+  // ---- job running/idle UI (now driven entirely by the Status sheet) ----
+  var brandMark = document.getElementById('brandMark');
+  var headerStatus = document.getElementById('headerStatus');
+  var headerStatusText = document.getElementById('headerStatusText');
+  var jobBanner = document.getElementById('jobBanner');
+  var jobBannerTitle = document.getElementById('jobBannerTitle');
+  var jobBannerSub = document.getElementById('jobBannerSub');
+
+  var jobIsRunning = false;
+  var lastKnownState = null; // 'running' | 'idle' | null (used to detect the running->idle transition)
+
+  function setJobRunning(running, unknown){
+    jobIsRunning = running;
+
+    brandMark.classList.toggle('running', running);
+    headerStatus.classList.toggle('running', running);
+    headerStatus.classList.toggle('idle', !running && !unknown);
+    headerStatus.classList.toggle('unknown', !!unknown);
+
+    if (unknown){
+      headerStatusText.textContent = 'Status unknown — can\'t reach Status sheet';
+    } else {
+      headerStatusText.textContent = running ? 'Job running' : 'Idle — ready to dispatch';
+    }
+
+    launchBtn.disabled = running;
+    urlInput.disabled = running;
+    maxPagesInput.disabled = running;
+    slip.classList.toggle('locked', running);
+    slipSub.textContent = running
+      ? 'A job is already running — wait for it to finish before launching another.'
+      : 'Fill this out to start a crawl.';
+
+    if (running){
+      jobBanner.className = 'job-banner show';
+      jobBannerTitle.textContent = 'Job running — scraping and/or emailing in progress';
+      jobBannerSub.textContent = 'This is read live from your n8n workflow\'s Status sheet.';
+    } else if (unknown){
+      jobBanner.className = 'job-banner show unknown';
+      jobBannerTitle.textContent = 'Could not read the Status sheet';
+      jobBannerSub.textContent = 'Check the Status sheet is shared / published to web, then hit Refresh.';
+    } else if (lastKnownState === 'running'){
+      // just flipped from running -> idle
+      jobBanner.className = 'job-banner show complete';
+      jobBannerTitle.textContent = 'Job complete — you can launch a new dispatch now.';
+      jobBannerSub.textContent = 'Your n8n workflow marked itself idle.';
+      setTimeout(function(){
+        if (!jobIsRunning) jobBanner.className = 'job-banner';
+      }, 20000);
+    } else {
+      jobBanner.className = 'job-banner';
+    }
+  }
+
+  // ---- Status sheet reader ----
+  // Fetches the Status sheet fresh (no caching) and resolves with
+  // 'running' | 'idle' | 'unknown'. Used by both the background poller
+  // and the pre-launch check, so there's exactly one source of truth.
+  function fetchStatusValue(){
+    var endpoint = 'https://docs.google.com/spreadsheets/d/' + encodeURIComponent(STATUS_SHEET_ID) +
+      '/gviz/tq?tqx=out:json&sheet=' + encodeURIComponent(STATUS_SHEET_NAME) +
+      '&_=' + Date.now(); // cache-bust so we never get a stale cached response
+
+    return fetch(endpoint, { cache: 'no-store' })
+      .then(function(res){
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.text();
+      })
+      .then(function(text){
+        var jsonStart = text.indexOf('{');
+        var jsonEnd = text.lastIndexOf('}') + 1;
+        if (jsonStart === -1 || jsonEnd === 0) throw new Error('bad response');
+        var data = JSON.parse(text.substring(jsonStart, jsonEnd));
+        if (!data.table) throw new Error('no table');
+
+        // Find the "status" value regardless of exact cell layout:
+        // works whether row1=header/"status", row2=value, or col A/B, etc.
+        var statusValue = null;
+        var rows = data.table.rows || [];
+        var cols = data.table.cols || [];
+        var labels = cols.map(function(c){ return (c.label || '').toString().trim().toLowerCase(); });
+        var statusColIdx = labels.indexOf('status');
+
+        if (statusColIdx !== -1 && rows.length > 0){
+          var cell = rows[0].c && rows[0].c[statusColIdx];
+          statusValue = cell ? String(cell.v || '').trim().toLowerCase() : null;
+        }
+
+        if (!statusValue){
+          outer:
+          for (var i = 0; i < rows.length; i++){
+            var c = rows[i].c || [];
+            for (var j = 0; j < c.length; j++){
+              var v = c[j] ? String(c[j].v || '').trim().toLowerCase() : '';
+              if (v === 'running' || v === 'idle'){ statusValue = v; break outer; }
+            }
+          }
+        }
+
+        if (statusValue === 'running') return 'running';
+        if (statusValue === 'idle') return 'idle';
+        return 'unknown';
+      })
+      .catch(function(){
+        return 'unknown';
+      });
+  }
+
+  // Background poller — updates the UI as a side effect.
+  function loadStatus(){
+    fetchStatusValue().then(function(state){
+      if (state === 'running'){
+        setJobRunning(true, false);
+        lastKnownState = 'running';
+      } else if (state === 'idle'){
+        setJobRunning(false, false);
+        lastKnownState = 'idle';
+      } else {
+        setJobRunning(false, true);
+      }
+    });
+  }
+
+  // Fresh, one-off check used right before launching — same fetch logic,
+  // but also updates the UI so the header/banner reflect what we just saw.
+  function checkStatusFresh(){
+    return fetchStatusValue().then(function(state){
+      if (state === 'running'){
+        setJobRunning(true, false);
+        lastKnownState = 'running';
+      } else if (state === 'idle'){
+        setJobRunning(false, false);
+        lastKnownState = 'idle';
+      } else {
+        setJobRunning(false, true);
+      }
+      return state;
+    });
+  }
 
   // ---- manifest (Google Sheets gviz read) ----
   var tablePanel = document.getElementById('tablePanel');
@@ -581,6 +588,13 @@
       '</div>';
   }
 
+  function hasAnyEmail(r){
+    return (r.authorEmails || '').split(';').map(function(s){return s.trim();}).filter(Boolean).length > 0;
+  }
+  function isSent(r){
+    return (r.Sent || r.sent || '').trim().toLowerCase() === 'yes';
+  }
+
   function renderTable(rows){
     if (!rows.length){
       renderEmpty();
@@ -595,13 +609,22 @@
       var url = r.articleUrl || '#';
       var authors = r.authors || '\u2014';
       var emails = (r.authorEmails || '').split(';').map(function(s){return s.trim();}).filter(Boolean);
-      var sent = (r.Sent || r.sent || '').trim().toLowerCase() === 'yes';
+      var sent = isSent(r);
+
+      var statusHtml;
+      if (emails.length === 0){
+        statusHtml = '<span class="stamp pending" style="border-style:solid;">No email</span>';
+      } else if (sent){
+        statusHtml = '<span class="stamp sent">Sent</span>';
+      } else {
+        statusHtml = '<span class="stamp pending">Pending</span>';
+      }
 
       html += '<tr>' +
         '<td><p class="art-title">' + escapeHtml(title) + '</p><a class="art-link" href="' + escapeAttr(url) + '" target="_blank" rel="noopener">' + escapeHtml(shortenUrl(url)) + '</a></td>' +
         '<td class="art-authors">' + escapeHtml(authors) + '</td>' +
         '<td class="email-count">' + emails.length + ' ' + (emails.length === 1 ? 'address' : 'addresses') + '</td>' +
-        '<td>' + (sent ? '<span class="stamp sent">Sent</span>' : '<span class="stamp pending">Pending</span>') + '</td>' +
+        '<td>' + statusHtml + '</td>' +
         '</tr>';
     });
 
@@ -621,10 +644,11 @@
   function escapeAttr(s){ return escapeHtml(s); }
 
   function updateStats(rows){
-    var sent = rows.filter(function(r){ return (r.Sent || r.sent || '').trim().toLowerCase() === 'yes'; }).length;
+    var withEmail = rows.filter(hasAnyEmail);
+    var sent = withEmail.filter(isSent).length;
     statTotal.textContent = rows.length;
     statSent.textContent = sent;
-    statPending.textContent = rows.length - sent;
+    statPending.textContent = withEmail.length - sent;
   }
 
   function applyFilter(){
@@ -645,10 +669,8 @@
     }
     refreshBtn.classList.add('spin');
 
-    var endpoint = 'https://docs.google.com/spreadsheets/d/' + encodeURIComponent(c.sheetId) + 
+    var endpoint = 'https://docs.google.com/spreadsheets/d/' + encodeURIComponent(c.sheetId) +
       '/gviz/tq?tqx=out:json&sheet=' + encodeURIComponent(c.sheetName);
-
-    console.log('Loading from:', endpoint);
 
     fetch(endpoint)
       .then(function(res){
@@ -672,11 +694,11 @@
         var allLabelsEmpty = labels.every(function(l){ return l === ''; });
         var rows = [];
         var rowData = data.table.rows || [];
-        
+
         if (allLabelsEmpty && rowData.length > 0) {
           var headerRow = rowData[0];
-          var headerLabels = (headerRow.c || []).map(function(cell){ 
-            return cell ? String(cell.v || '').trim() : ''; 
+          var headerLabels = (headerRow.c || []).map(function(cell){
+            return cell ? String(cell.v || '').trim() : '';
           });
           for (var i = 1; i < rowData.length; i++) {
             var row = rowData[i];
@@ -702,9 +724,6 @@
           return r.articleUrl && r.articleUrl.toString().trim() !== '';
         });
 
-        console.log('Final rows count:', rows.length);
-        console.log('First row sample:', rows[0]);
-
         currentRows = rows;
         updateStats(rows);
         applyFilter();
@@ -720,11 +739,17 @@
       });
   }
 
-  refreshBtn.addEventListener('click', loadManifest);
+  refreshBtn.addEventListener('click', function(){
+    loadManifest();
+    loadStatus();
+  });
 
-  // initial load + auto-refresh every 60 seconds
+  // initial load + recurring poll — status and manifest both come straight
+  // from the sheets your n8n workflow writes to. No guessing, no timers.
+  loadStatus();
   loadManifest();
-  setInterval(loadManifest, 60000);
+  setInterval(loadStatus, POLL_MS);
+  setInterval(loadManifest, POLL_MS);
 
 })();
 </script>
