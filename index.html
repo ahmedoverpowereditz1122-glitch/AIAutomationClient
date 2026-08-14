@@ -198,6 +198,23 @@
     .art-authors{ font-size: 12.5px; color: var(--text-on-ink-dim); line-height: 1.5; }
     .email-count{ font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: var(--text-on-ink-dim); }
 
+    /* NEW: sent-email preview cell */
+    .email-preview{ max-width: 260px; }
+    .email-preview summary{
+      cursor: pointer; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;
+      color: var(--teal); list-style: none; user-select: none;
+    }
+    .email-preview summary::-webkit-details-marker{ display:none; }
+    .email-preview summary::before{ content: "▸ "; }
+    .email-preview[open] summary::before{ content: "▾ "; }
+    .email-preview pre{
+      margin: 8px 0 0; padding: 10px 12px; background: rgba(0,0,0,0.25);
+      border: 1px solid var(--line); border-radius: var(--radius);
+      font-family: 'IBM Plex Mono', monospace; font-size: 11px; line-height: 1.5;
+      color: var(--text-on-ink-dim); white-space: pre-wrap; word-break: break-word;
+      max-height: 220px; overflow-y: auto;
+    }
+
     .stamp{
       display:inline-flex; align-items:center; justify-content:center; width: 74px; height: 42px;
       border: 2px solid; border-radius: 30px 30px 30px 30px / 24px 24px 24px 24px;
@@ -226,6 +243,7 @@
       header{ padding: 24px 20px 0; }
       .wrap{ padding: 0 20px 72px; }
       thead th:nth-child(3), tbody td:nth-child(3){ display:none; }
+      thead th:nth-child(5), tbody td:nth-child(5){ display:none; }
     }
     @media (prefers-reduced-motion: reduce){ *{ animation: none !important; transition: none !important; } }
   </style>
@@ -601,15 +619,16 @@
       return;
     }
     var html = '<table><thead><tr>' +
-      '<th>Article</th><th>Authors</th><th>Emails</th><th>Status</th>' +
+      '<th>Article</th><th>Authors</th><th>Emails</th><th>Status</th><th>Sent Email</th>' +
       '</tr></thead><tbody>';
 
-    rows.forEach(function(r){
+    rows.forEach(function(r, idx){
       var title = r.title || '(untitled)';
       var url = r.articleUrl || '#';
       var authors = r.authors || '\u2014';
       var emails = (r.authorEmails || '').split(';').map(function(s){return s.trim();}).filter(Boolean);
       var sent = isSent(r);
+      var emailContent = (r.Email || '').trim();
 
       var statusHtml;
       if (emails.length === 0){
@@ -620,11 +639,24 @@
         statusHtml = '<span class="stamp pending">Pending</span>';
       }
 
+      var emailCellHtml;
+      if (emailContent){
+        var rowId = 'email-content-' + idx;
+        emailCellHtml =
+          '<details class="email-preview">' +
+            '<summary>View sent email</summary>' +
+            '<pre id="' + rowId + '">' + escapeHtml(emailContent) + '</pre>' +
+          '</details>';
+      } else {
+        emailCellHtml = '<span class="email-count">\u2014</span>';
+      }
+
       html += '<tr>' +
         '<td><p class="art-title">' + escapeHtml(title) + '</p><a class="art-link" href="' + escapeAttr(url) + '" target="_blank" rel="noopener">' + escapeHtml(shortenUrl(url)) + '</a></td>' +
         '<td class="art-authors">' + escapeHtml(authors) + '</td>' +
         '<td class="email-count">' + emails.length + ' ' + (emails.length === 1 ? 'address' : 'addresses') + '</td>' +
         '<td>' + statusHtml + '</td>' +
+        '<td>' + emailCellHtml + '</td>' +
         '</tr>';
     });
 
@@ -701,7 +733,8 @@
           'authorEmails',
           'publishedDate',
           'articleText',
-          'Sent'
+          'Sent',
+          'Email'
         ];
 
         var rows = rowData.map(function(row){
